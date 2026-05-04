@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Building2 } from "lucide-react";
+import { Building2, Pencil, Trash } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { ModulePage } from "@/components/ModulePage";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
@@ -69,6 +69,8 @@ export default function TecnicosPage() {
           { label: "Matrícula" },
           { label: "Status" },
           { label: "Data Cadastro" }
+        ,
+          { label: "Ações" }
         ]}
         title="Gerenciamento de Técnicos"
         formTitle="Cadastrar Novo Técnico"

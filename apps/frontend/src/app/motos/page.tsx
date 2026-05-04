@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bike } from "lucide-react";
+import { Bike, Pencil, Trash } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { ModulePage } from "@/components/ModulePage";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
@@ -77,6 +77,8 @@ export default function MotosPage() {
           { label: "Modelo" },
           { label: "KM atual" },
           { label: "Status" }
+        ,
+          { label: "Ações" }
         ]}
         title="Gerenciamento de Motos"
         formTitle="Cadastrar Nova Moto"

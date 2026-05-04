@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ReceiptText } from "lucide-react";
+import { ReceiptText, Pencil, Trash } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { ModulePage } from "@/components/ModulePage";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
@@ -12,6 +12,28 @@ export default function ManutencaoPage() {
   const [tecnicos, setTecnicos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = getSupabaseBrowserClient();
+
+  
+  function handleEdit(item: any) {
+    alert("Editar funcionalidade em construção para o ID: " + item.id);
+  }
+
+  async function handleDelete(id: string | number) {
+    if (!confirm("Tem certeza que deseja excluir este registro?")) return;
+    
+    setLoading(true);
+    let table = "despesas";
+    if (window.location.pathname.includes("tecnicos")) table = "tecnicos";
+    if (window.location.pathname.includes("motos")) table = "motos";
+
+    const { error } = await supabase.from(table).delete().eq("id", id);
+    if (error) {
+      alert("Erro ao excluir: " + error.message);
+    } else {
+      fetchData();
+    }
+    setLoading(false);
+  }
 
   async function fetchData() {
     setLoading(true);
@@ -122,6 +144,8 @@ export default function ManutencaoPage() {
           { label: "Placa" },
           { label: "Descrição" },
           { label: "Valor" }
+        ,
+          { label: "Ações" }
         ]}
         title="Gastos com Manutenção"
         formTitle="Lançar Manutenção"
@@ -139,6 +163,21 @@ export default function ManutencaoPage() {
               <td><strong>{obsData.placa}</strong></td>
               <td>{gasto.descricao}</td>
               <td>R$ {gasto.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+              <td style={{ display: 'flex', gap: '8px' }}>
+
+                <button className="action-btn edit" onClick={() => handleEdit(gasto)} title="Editar">
+
+                  <Pencil size={16} />
+
+                </button>
+
+                <button className="action-btn delete" onClick={() => handleDelete(gasto.id)} title="Excluir">
+
+                  <Trash size={16} />
+
+                </button>
+
+              </td>
             </tr>
           );
         }}

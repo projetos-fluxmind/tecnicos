@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Fuel } from "lucide-react";
+import { Fuel, Pencil, Trash } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { ModulePage } from "@/components/ModulePage";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
@@ -12,6 +12,28 @@ export default function AbastecimentoPage() {
   const [motos, setMotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = getSupabaseBrowserClient();
+
+  
+  function handleEdit(item: any) {
+    alert("Editar funcionalidade em construção para o ID: " + item.id);
+  }
+
+  async function handleDelete(id: string | number) {
+    if (!confirm("Tem certeza que deseja excluir este registro?")) return;
+    
+    setLoading(true);
+    let table = "despesas";
+    if (window.location.pathname.includes("tecnicos")) table = "tecnicos";
+    if (window.location.pathname.includes("motos")) table = "motos";
+
+    const { error } = await supabase.from(table).delete().eq("id", id);
+    if (error) {
+      alert("Erro ao excluir: " + error.message);
+    } else {
+      fetchData();
+    }
+    setLoading(false);
+  }
 
   async function fetchData() {
     setLoading(true);
@@ -126,6 +148,8 @@ export default function AbastecimentoPage() {
           { label: "Técnico" },
           { label: "Moto / KM" },
           { label: "Valor" }
+        ,
+          { label: "Ações" }
         ]}
         title="Gastos com Abastecimento"
         formTitle="Lançar Abastecimento"
@@ -145,6 +169,21 @@ export default function AbastecimentoPage() {
                 <div style={{ fontSize: "0.85rem", opacity: 0.7 }}>{obsData.km?.toLocaleString("pt-BR")} KM</div>
               </td>
               <td>R$ {gasto.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+              <td style={{ display: 'flex', gap: '8px' }}>
+
+                <button className="action-btn edit" onClick={() => handleEdit(gasto)} title="Editar">
+
+                  <Pencil size={16} />
+
+                </button>
+
+                <button className="action-btn delete" onClick={() => handleDelete(gasto.id)} title="Excluir">
+
+                  <Trash size={16} />
+
+                </button>
+
+              </td>
             </tr>
           );
         }}
