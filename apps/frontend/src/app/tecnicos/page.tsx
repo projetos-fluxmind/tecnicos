@@ -24,12 +24,17 @@ export default function TecnicosPage() {
   }
 
   async function handleDelete(id: string | number) {
-    if (!confirm("Tem certeza que deseja inativar este técnico?")) return;
+    if (!confirm("Tem certeza que deseja excluir este técnico? Esta ação é irreversível.")) return;
     
     setLoading(true);
-    const { error } = await supabase.from("tecnicos").update({ status: 'inativo' }).eq("id", id);
+    
+    // Primeiro removemos os vínculos na tabela de junção para evitar erro de FK
+    await supabase.from("vinculos_tecnico_moto").delete().eq("tecnico_id", id);
+    
+    const { error } = await supabase.from("tecnicos").delete().eq("id", id);
+    
     if (error) {
-      alert("Erro ao inativar: " + error.message);
+      alert("Erro ao excluir: " + error.message);
     } else {
       fetchTecnicos();
     }

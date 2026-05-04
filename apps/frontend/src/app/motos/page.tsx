@@ -24,12 +24,17 @@ export default function MotosPage() {
   }
 
   async function handleDelete(id: string | number) {
-    if (!confirm("Tem certeza que deseja inativar esta moto?")) return;
+    if (!confirm("Tem certeza que deseja excluir esta moto? Esta ação é irreversível.")) return;
     
     setLoading(true);
-    const { error } = await supabase.from("motos").update({ status: 'inativa' }).eq("id", id);
+    
+    // Primeiro removemos os vínculos na tabela de junção para evitar erro de FK
+    await supabase.from("vinculos_tecnico_moto").delete().eq("moto_id", id);
+    
+    const { error } = await supabase.from("motos").delete().eq("id", id);
+    
     if (error) {
-      alert("Erro ao inativar: " + error.message);
+      alert("Erro ao excluir: " + error.message);
     } else {
       fetchMotos();
     }
