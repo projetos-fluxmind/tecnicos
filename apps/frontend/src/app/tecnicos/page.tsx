@@ -18,6 +18,24 @@ export default function TecnicosPage() {
   }, []);
   const supabase = getSupabaseBrowserClient();
 
+  function handleEdit(item: any) {
+    setEditingItem(item);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function handleDelete(id: string | number) {
+    if (!confirm("Tem certeza que deseja excluir este técnico?")) return;
+    
+    setLoading(true);
+    const { error } = await supabase.from("tecnicos").delete().eq("id", id);
+    if (error) {
+      alert("Erro ao excluir: " + error.message);
+    } else {
+      fetchTecnicos();
+    }
+    setLoading(false);
+  }
+
   async function fetchTecnicos() {
     setLoading(true);
     const { data, error } = await supabase
@@ -111,6 +129,14 @@ export default function TecnicosPage() {
               </span>
             </td>
             <td>{new Date(tecnico.created_at).toLocaleDateString("pt-BR")}</td>
+            <td style={{ display: 'flex', gap: '8px' }}>
+              <button className="action-btn edit" onClick={() => handleEdit(tecnico)} title="Editar">
+                <Pencil size={16} />
+              </button>
+              <button className="action-btn delete" onClick={() => handleDelete(tecnico.id)} title="Excluir">
+                <Trash size={16} />
+              </button>
+            </td>
           </tr>
         )}
       />

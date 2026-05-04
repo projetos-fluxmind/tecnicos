@@ -18,6 +18,24 @@ export default function MotosPage() {
   }, []);
   const supabase = getSupabaseBrowserClient();
 
+  function handleEdit(item: any) {
+    setEditingItem(item);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function handleDelete(id: string | number) {
+    if (!confirm("Tem certeza que deseja excluir esta moto?")) return;
+    
+    setLoading(true);
+    const { error } = await supabase.from("motos").delete().eq("id", id);
+    if (error) {
+      alert("Erro ao excluir: " + error.message);
+    } else {
+      fetchMotos();
+    }
+    setLoading(false);
+  }
+
   async function fetchMotos() {
     setLoading(true);
     const { data, error } = await supabase
@@ -124,6 +142,14 @@ export default function MotosPage() {
               }}>
                 {moto.status?.toUpperCase() || "N/A"}
               </span>
+            </td>
+            <td style={{ display: 'flex', gap: '8px' }}>
+              <button className="action-btn edit" onClick={() => handleEdit(moto)} title="Editar">
+                <Pencil size={16} />
+              </button>
+              <button className="action-btn delete" onClick={() => handleDelete(moto.id)} title="Excluir">
+                <Trash size={16} />
+              </button>
             </td>
           </tr>
         )}
