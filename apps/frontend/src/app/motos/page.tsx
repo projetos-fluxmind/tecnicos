@@ -9,6 +9,13 @@ import { getSupabaseBrowserClient } from "@/lib/supabase";
 export default function MotosPage() {
   const [motos, setMotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState<any>(null);
+
+  useEffect(() => {
+    const handleCancel = () => setEditingItem(null);
+    window.addEventListener("cancelEdit", handleCancel);
+    return () => window.removeEventListener("cancelEdit", handleCancel);
+  }, []);
   const supabase = getSupabaseBrowserClient();
 
   async function fetchMotos() {
@@ -26,8 +33,26 @@ export default function MotosPage() {
 
   async function handleSave(formData: any) {
     setLoading(true);
-    const { error } = await supabase.from("motos").insert([
-      {
+    
+    let error;
+    if (formData.id) {
+      // Update
+      const { error: updateError } = await supabase.from("motos")
+        .update({
+        placa: formData.placa,
+        hodometro_atual: parseInt(formData.km_atual) || 0,
+        modelo: formData.modelo || "N/A",
+        marca: formData.marca || "N/A",
+        ano: parseInt(formData.ano) || new Date().getFullYear(),
+        status: "ativa"
+      })
+        .eq("id", formData.id);
+      error = updateError;
+      setEditingItem(null);
+    } else {
+      // Insert
+      const { error: insertError } = await supabase.from("motos").insert([
+        {
         placa: formData.placa,
         hodometro_atual: parseInt(formData.km_atual) || 0,
         modelo: formData.modelo || "N/A",
@@ -35,7 +60,9 @@ export default function MotosPage() {
         ano: parseInt(formData.ano) || new Date().getFullYear(),
         status: "ativa"
       }
-    ]);
+      ]);
+      error = insertError;
+    }
 
     if (error) {
       alert("Erro ao salvar moto: " + error.message);

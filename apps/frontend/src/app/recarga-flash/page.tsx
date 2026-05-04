@@ -10,11 +10,19 @@ export default function RecargaFlashPage() {
   const [recargas, setRecargas] = useState<any[]>([]);
   const [tecnicos, setTecnicos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState<any>(null);
+
+  useEffect(() => {
+    const handleCancel = () => setEditingItem(null);
+    window.addEventListener("cancelEdit", handleCancel);
+    return () => window.removeEventListener("cancelEdit", handleCancel);
+  }, []);
   const supabase = getSupabaseBrowserClient();
 
   
   function handleEdit(item: any) {
-    alert("Editar funcionalidade em construção para o ID: " + item.id);
+    setEditingItem(item);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async function handleDelete(id: string | number) {
@@ -67,8 +75,27 @@ export default function RecargaFlashPage() {
 
   async function handleSave(formData: any) {
     setLoading(true);
-    const { error } = await supabase.from("despesas").insert([
-      {
+    
+    let error;
+    if (formData.id) {
+      // Update
+      const { error: updateError } = await supabase.from("despesas")
+        .update({
+        tecnico_id: parseInt(formData.tecnico_id),
+        valor: parseFloat(formData.valor.replace(",", ".")),
+        data: formData.data_recarga,
+        categoria: "outros",
+        descricao: "Recarga Cartão Flash",
+        observacoes: JSON.stringify({ tipo_real: "recarga_flash" }),
+        aprovado_supervisor: true
+      })
+        .eq("id", formData.id);
+      error = updateError;
+      setEditingItem(null);
+    } else {
+      // Insert
+      const { error: insertError } = await supabase.from("despesas").insert([
+        {
         tecnico_id: parseInt(formData.tecnico_id),
         valor: parseFloat(formData.valor.replace(",", ".")),
         data: formData.data_recarga,
@@ -77,7 +104,9 @@ export default function RecargaFlashPage() {
         observacoes: JSON.stringify({ tipo_real: "recarga_flash" }),
         aprovado_supervisor: true
       }
-    ]);
+      ]);
+      error = insertError;
+    }
 
     if (error) {
       alert("Erro ao salvar recarga: " + error.message);
@@ -95,7 +124,7 @@ export default function RecargaFlashPage() {
 
   return (
     <AppShell activePath="/recarga-flash">
-      <ModulePage
+      <ModulePage editingItem={editingItem}
         actionLabel="Nova recarga"
         description="Controle de créditos e recargas no cartão Flash por técnico."
         fields={[
@@ -132,7 +161,15 @@ export default function RecargaFlashPage() {
             <td>{new Date(recarga.data).toLocaleDateString("pt-BR")}</td>
             <td>{recarga.tecnicos?.nome}</td>
             <td>R$ {recarga.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
-          </tr>
+            <td style={{ display: 'flex', gap: '8px' }}>
+                <button className="action-btn edit" onClick={() => handleEdit(recarga)} title="Editar">
+                  <Pencil size={16} />
+                </button>
+                <button className="action-btn delete" onClick={() => handleDelete(recarga.id)} title="Excluir">
+                  <Trash size={16} />
+                </button>
+              </td>
+            </tr>
         )}
       />
     </AppShell>

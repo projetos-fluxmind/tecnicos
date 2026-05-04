@@ -11,11 +11,19 @@ export default function AbastecimentoPage() {
   const [tecnicos, setTecnicos] = useState<any[]>([]);
   const [motos, setMotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState<any>(null);
+
+  useEffect(() => {
+    const handleCancel = () => setEditingItem(null);
+    window.addEventListener("cancelEdit", handleCancel);
+    return () => window.removeEventListener("cancelEdit", handleCancel);
+  }, []);
   const supabase = getSupabaseBrowserClient();
 
   
   function handleEdit(item: any) {
-    alert("Editar funcionalidade em construção para o ID: " + item.id);
+    setEditingItem(item);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async function handleDelete(id: string | number) {
@@ -69,8 +77,31 @@ export default function AbastecimentoPage() {
     // Encontra a placa da moto selecionada para salvar na observação
     const moto = motos.find(m => m.id.toString() === formData.moto_id);
     
-    const { error } = await supabase.from("despesas").insert([
-      {
+    
+    let error;
+    if (formData.id) {
+      // Update
+      const { error: updateError } = await supabase.from("despesas")
+        .update({
+        tecnico_id: parseInt(formData.tecnico_id),
+        valor: parseFloat(formData.valor.replace(",", ".")),
+        data: formData.data_gasto,
+        categoria: "combustivel",
+        descricao: `Abastecimento - Moto ${moto?.placa || "N/A"}`,
+        observacoes: JSON.stringify({
+          moto_id: formData.moto_id,
+          placa: moto?.placa,
+          km: formData.km_registrado
+        }),
+        aprovado_supervisor: true
+      })
+        .eq("id", formData.id);
+      error = updateError;
+      setEditingItem(null);
+    } else {
+      // Insert
+      const { error: insertError } = await supabase.from("despesas").insert([
+        {
         tecnico_id: parseInt(formData.tecnico_id),
         valor: parseFloat(formData.valor.replace(",", ".")),
         data: formData.data_gasto,
@@ -83,7 +114,9 @@ export default function AbastecimentoPage() {
         }),
         aprovado_supervisor: true
       }
-    ]);
+      ]);
+      error = insertError;
+    }
 
     if (error) {
       alert("Erro ao salvar abastecimento: " + error.message);
@@ -116,7 +149,7 @@ export default function AbastecimentoPage() {
 
   return (
     <AppShell activePath="/abastecimento">
-      <ModulePage
+      <ModulePage editingItem={editingItem}
         actionLabel="Novo abastecimento"
         description="Registro de abastecimentos com atualização automática do hodômetro da moto."
         fields={[

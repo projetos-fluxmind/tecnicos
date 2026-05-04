@@ -9,6 +9,13 @@ import { getSupabaseBrowserClient } from "@/lib/supabase";
 export default function TecnicosPage() {
   const [tecnicos, setTecnicos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState<any>(null);
+
+  useEffect(() => {
+    const handleCancel = () => setEditingItem(null);
+    window.addEventListener("cancelEdit", handleCancel);
+    return () => window.removeEventListener("cancelEdit", handleCancel);
+  }, []);
   const supabase = getSupabaseBrowserClient();
 
   async function fetchTecnicos() {
@@ -26,13 +33,30 @@ export default function TecnicosPage() {
 
   async function handleSave(formData: any) {
     setLoading(true);
-    const { error } = await supabase.from("tecnicos").insert([
-      {
+    
+    let error;
+    if (formData.id) {
+      // Update
+      const { error: updateError } = await supabase.from("tecnicos")
+        .update({
+        nome: formData.nome,
+        matricula: formData.matricula,
+        status: "ativo"
+      })
+        .eq("id", formData.id);
+      error = updateError;
+      setEditingItem(null);
+    } else {
+      // Insert
+      const { error: insertError } = await supabase.from("tecnicos").insert([
+        {
         nome: formData.nome,
         matricula: formData.matricula,
         status: "ativo"
       }
-    ]);
+      ]);
+      error = insertError;
+    }
 
     if (error) {
       alert("Erro ao salvar técnico: " + error.message);

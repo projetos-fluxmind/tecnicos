@@ -10,11 +10,19 @@ export default function HospedagemPage() {
   const [gastos, setGastos] = useState<any[]>([]);
   const [tecnicos, setTecnicos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState<any>(null);
+
+  useEffect(() => {
+    const handleCancel = () => setEditingItem(null);
+    window.addEventListener("cancelEdit", handleCancel);
+    return () => window.removeEventListener("cancelEdit", handleCancel);
+  }, []);
   const supabase = getSupabaseBrowserClient();
 
   
   function handleEdit(item: any) {
-    alert("Editar funcionalidade em construção para o ID: " + item.id);
+    setEditingItem(item);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async function handleDelete(id: string | number) {
@@ -58,8 +66,26 @@ export default function HospedagemPage() {
 
   async function handleSave(formData: any) {
     setLoading(true);
-    const { error } = await supabase.from("despesas").insert([
-      {
+    
+    let error;
+    if (formData.id) {
+      // Update
+      const { error: updateError } = await supabase.from("despesas")
+        .update({
+        tecnico_id: parseInt(formData.tecnico_id),
+        valor: parseFloat(formData.valor.replace(",", ".")),
+        descricao: formData.motivo,
+        data: formData.data_gasto,
+        categoria: "hospedagem",
+        aprovado_supervisor: true
+      })
+        .eq("id", formData.id);
+      error = updateError;
+      setEditingItem(null);
+    } else {
+      // Insert
+      const { error: insertError } = await supabase.from("despesas").insert([
+        {
         tecnico_id: parseInt(formData.tecnico_id),
         valor: parseFloat(formData.valor.replace(",", ".")),
         descricao: formData.motivo,
@@ -67,7 +93,9 @@ export default function HospedagemPage() {
         categoria: "hospedagem",
         aprovado_supervisor: true
       }
-    ]);
+      ]);
+      error = insertError;
+    }
 
     if (error) {
       alert("Erro ao salvar hospedagem: " + error.message);
@@ -85,7 +113,7 @@ export default function HospedagemPage() {
 
   return (
     <AppShell activePath="/hospedagem">
-      <ModulePage
+      <ModulePage editingItem={editingItem}
         actionLabel="Nova hospedagem"
         description="Registro de hospedagens por técnico, valor, motivo e período de operação."
         fields={[
@@ -125,7 +153,15 @@ export default function HospedagemPage() {
             <td>{gasto.tecnicos?.nome}</td>
             <td>{gasto.descricao}</td>
             <td>R$ {gasto.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
-          </tr>
+            <td style={{ display: 'flex', gap: '8px' }}>
+                <button className="action-btn edit" onClick={() => handleEdit(gasto)} title="Editar">
+                  <Pencil size={16} />
+                </button>
+                <button className="action-btn delete" onClick={() => handleDelete(gasto.id)} title="Excluir">
+                  <Trash size={16} />
+                </button>
+              </td>
+            </tr>
         )}
       />
     </AppShell>

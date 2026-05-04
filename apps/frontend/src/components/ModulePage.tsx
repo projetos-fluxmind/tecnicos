@@ -27,6 +27,7 @@ type ModulePageProps = {
   onSave?: (data: any) => Promise<void>;
   renderRow?: (item: any) => React.ReactNode;
   formTitle?: string;
+  editingItem?: any;
 };
 
 export function ModulePage({
@@ -41,7 +42,8 @@ export function ModulePage({
   isLoading = false,
   onSave,
   renderRow,
-  formTitle = "Registrar Novo"
+  formTitle = "Registrar Novo",
+  editingItem = null
 }: ModulePageProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,6 +52,11 @@ export function ModulePage({
     const form = e.currentTarget;
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
+    
+    // Add the ID if we are editing
+    if (editingItem?.id) {
+      payload.id = editingItem.id;
+    }
     
     await onSave(payload);
     form.reset();
@@ -77,37 +84,61 @@ export function ModulePage({
       <section className="panel-card">
         <div className="section-heading">
           <div>
-            <h2>{formTitle}</h2>
+            <h2>{editingItem ? "Editar Registro" : formTitle}</h2>
           </div>
           <Icon size={24} />
         </div>
 
-        <form className="form-grid" onSubmit={handleSubmit}>
-          {fields.map((field) => (
-            <label className="field" key={field.name}>
-              <span>{field.label}</span>
-              {field.type === "select" ? (
-                <select name={field.name} required>
-                  <option value="">{field.placeholder || "Selecione..."}</option>
-                  {field.options?.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  name={field.name}
-                  placeholder={field.placeholder}
-                  type={field.type ?? "text"}
-                  required
-                />
-              )}
-            </label>
-          ))}
-          <button className="secondary-action" type="submit" disabled={isLoading}>
-            {isLoading ? "Salvando..." : "Salvar Registro"}
-          </button>
+        <form className="form-grid" onSubmit={handleSubmit} key={editingItem?.id || 'new'}>
+          {fields.map((field) => {
+            // format date values if needed
+            let defValue = editingItem ? editingItem[field.name] : "";
+            if (field.type === "date" && defValue) {
+              defValue = defValue.split('T')[0];
+            }
+
+            return (
+              <label className="field" key={field.name}>
+                <span>{field.label}</span>
+                {field.type === "select" ? (
+                  <select name={field.name} required defaultValue={defValue}>
+                    <option value="">{field.placeholder || "Selecione..."}</option>
+                    {field.options?.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    name={field.name}
+                    placeholder={field.placeholder}
+                    type={field.type ?? "text"}
+                    required
+                    defaultValue={defValue}
+                  />
+                )}
+              </label>
+            );
+          })}
+          <div style={{ display: 'flex', gap: '16px', gridColumn: '1 / -1' }}>
+            <button className="secondary-action" type="submit" disabled={isLoading}>
+              {isLoading ? "Salvando..." : (editingItem ? "Salvar Alterações" : "Salvar Registro")}
+            </button>
+            {editingItem && (
+              <button 
+                type="button" 
+                className="secondary-action" 
+                style={{ background: '#333', borderColor: '#444' }}
+                onClick={() => {
+                  const evt = new CustomEvent('cancelEdit');
+                  window.dispatchEvent(evt);
+                }}
+              >
+                Cancelar
+              </button>
+            )}
+          </div>
         </form>
       </section>
 

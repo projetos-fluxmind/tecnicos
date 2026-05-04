@@ -11,11 +11,19 @@ export default function ManutencaoPage() {
   const [motos, setMotos] = useState<any[]>([]);
   const [tecnicos, setTecnicos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingItem, setEditingItem] = useState<any>(null);
+
+  useEffect(() => {
+    const handleCancel = () => setEditingItem(null);
+    window.addEventListener("cancelEdit", handleCancel);
+    return () => window.removeEventListener("cancelEdit", handleCancel);
+  }, []);
   const supabase = getSupabaseBrowserClient();
 
   
   function handleEdit(item: any) {
-    alert("Editar funcionalidade em construção para o ID: " + item.id);
+    setEditingItem(item);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async function handleDelete(id: string | number) {
@@ -78,8 +86,31 @@ export default function ManutencaoPage() {
     
     const moto = motos.find(m => m.id.toString() === formData.moto_id);
     
-    const { error } = await supabase.from("despesas").insert([
-      {
+    
+    let error;
+    if (formData.id) {
+      // Update
+      const { error: updateError } = await supabase.from("despesas")
+        .update({
+        tecnico_id: parseInt(formData.tecnico_id),
+        valor: parseFloat(formData.valor.replace(",", ".")),
+        descricao: formData.descricao,
+        data: formData.data_gasto,
+        categoria: "outros",
+        observacoes: JSON.stringify({
+          tipo_real: "manutencao",
+          moto_id: formData.moto_id,
+          placa: moto?.placa || "N/A"
+        }),
+        aprovado_supervisor: true
+      })
+        .eq("id", formData.id);
+      error = updateError;
+      setEditingItem(null);
+    } else {
+      // Insert
+      const { error: insertError } = await supabase.from("despesas").insert([
+        {
         tecnico_id: parseInt(formData.tecnico_id),
         valor: parseFloat(formData.valor.replace(",", ".")),
         descricao: formData.descricao,
@@ -92,7 +123,9 @@ export default function ManutencaoPage() {
         }),
         aprovado_supervisor: true
       }
-    ]);
+      ]);
+      error = insertError;
+    }
 
     if (error) {
       alert("Erro ao salvar manutenção: " + error.message);
@@ -111,7 +144,7 @@ export default function ManutencaoPage() {
 
   return (
     <AppShell activePath="/manutencao">
-      <ModulePage
+      <ModulePage editingItem={editingItem}
         actionLabel="Nova manutenção"
         description="Acompanhamento de custos de manutenção por moto, descrição do serviço e data do gasto."
         fields={[
