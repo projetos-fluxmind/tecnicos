@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dbd9db",
+                        "primary-fixed": "#d3e4ff",
+                        "on-secondary-fixed": "#051d30",
+                        "outline-variant": "#c4c6cd",
+                        "surface-bright": "#fbf9fb",
+                        "primary": "#04172c",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#4e6078",
+                        "tertiary-fixed": "#dfe3e4",
+                        "on-tertiary-container": "#8f9394",
+                        "surface-container-low": "#f5f3f5",
+                        "tertiary-fixed-dim": "#c3c7c8",
+                        "outline": "#74777d",
+                        "surface-variant": "#e4e2e4",
+                        "surface-container": "#efedef",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#36485f",
+                        "surface-container-highest": "#e4e2e4",
+                        "secondary-fixed-dim": "#b3c9e2",
+                        "tertiary": "#131819",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e9e7ea",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#181c1d",
+                        "primary-container": "#1a2c42",
+                        "secondary-fixed": "#cfe5ff",
+                        "inverse-surface": "#303032",
+                        "background": "#fbf9fb",
+                        "secondary": "#4b6076",
+                        "on-secondary-container": "#50657b",
+                        "on-surface-variant": "#44474d",
+                        "on-background": "#1b1c1d",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f2f0f2",
+                        "on-primary-fixed": "#091c32",
+                        "on-surface": "#1b1c1d",
+                        "primary-fixed-dim": "#b6c8e4",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#434849",
+                        "surface": "#fbf9fb",
+                        "secondary-container": "#cce2fc",
+                        "inverse-primary": "#b6c8e4",
+                        "on-primary-container": "#8294ae",
+                        "tertiary-container": "#272c2d",
+                        "on-secondary-fixed-variant": "#34495e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar_width": "260px",
+                        "gutter": "24px",
+                        "sidebar_collapsed": "72px",
+                        "header_height": "64px",
+                        "container_max_width": "1440px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Inter"],
+                        "caption": ["Inter"],
+                        "label-bold": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h3": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "300"}],
+                        "label-bold": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "h1": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h3": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #fbf9fb; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-16 z-50 border-b bg-white border-slate-200 shadow-[0px_4px_10px_rgba(0,0,0,0.05)] flex justify-between items-center px-6">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-[#1A2C42]">Flash Expense Manager</span>
+</div>
+<div class="flex items-center gap-8">
+<nav class="hidden md:flex gap-6">
+<a class="text-slate-500 hover:text-[#1A2C42] font-body-md text-body-md" href="#">Dashboard</a>
+<a class="text-[#1A2C42] border-b-2 border-[#1A2C42] pb-1 font-semibold font-body-md text-body-md" href="#">Relatórios</a>
+<a class="text-slate-500 hover:text-[#1A2C42] font-body-md text-body-md" href="#">Configurações</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-600 hover:bg-slate-50 p-2 rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined text-slate-600 hover:bg-slate-50 p-2 rounded-full transition-colors">help_outline</button>
+<div class="h-8 w-8 rounded-full bg-slate-200 overflow-hidden">
+<img alt="Avatar do Gestor" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate manager in a clean, modern office environment. The person is smiling confidently, wearing business casual attire. The lighting is bright and natural, reflecting a high-end light-mode UI aesthetic with neutral gray and white tones and a shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzb6__V3ywWVIr_T0MYH4oWy13EHavDeq2YAe9Ctc2MWSLPBOLZSsgGDWfCq7qAhdahM9KFhuou2kUEF3AVlvn2iTaIzgQkd_3HAdSqK7hJPy2WljwfOLXDE73iCGx3QmwDACaHCwC59oXtBdz8JJLjVfTLCw95cFr0dZZIdI3SqrOggMvLu3Muwrtk-ydQIj8MRlUI2qCsHfGypynSvBgQiNZkca-Y60wbPu4XVMbtc_Q5P8YmoZeL0Iluh2DODZSUqK0pOkN6nA"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-[260px] border-r bg-white border-slate-200 flex flex-col py-4 gap-2">
+<div class="px-6 mb-6">
+<h2 class="font-black tracking-tight text-[#1A2C42] text-h3 font-h3">Operacional</h2>
+<p class="text-slate-500 text-caption font-caption">Gestão de Frota</p>
+</div>
+<nav class="flex-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 bg-slate-100 text-[#1A2C42] border-l-4 border-[#1A2C42] hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-sm font-medium">Gastos</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">credit_score</span>
+<span class="text-sm font-medium">Recarga Flash</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">engineering</span>
+<span class="text-sm font-medium">Técnicos</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">two_wheeler</span>
+<span class="text-sm font-medium">Motos</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-sm font-medium">Histórico</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-[#1A2C42] text-white py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">add</span>
+                Novo Gasto
+            </button>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-100">
+<a class="flex items-center gap-3 px-6 py-3 text-error hover:bg-red-50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Sair</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-[260px] mt-16 p-8 min-h-screen">
+<div class="max-w-[1440px] mx-auto">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h1 class="text-h1 font-h1 text-primary">Gastos com Manutenção</h1>
+<p class="text-on-surface-variant font-body-md text-body-md">Gerencie os registros de manutenção e custos operacionais da frota.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">download</span>
+                    Exportar CSV
+                </button>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Register Form Card -->
+<section class="col-span-12 lg:col-span-4">
+<div class="bg-white rounded-xl shadow-[0px_4px_10px_rgba(0,0,0,0.05)] p-6">
+<h3 class="text-h3 font-h3 text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">add_circle</span>
+                            Registrar Manutenção
+                        </h3>
+<form class="space-y-4">
+<div>
+<label class="block text-label-bold font-label-bold text-on-surface-variant mb-2">Moto (Placa)</label>
+<select class="w-full bg-white border border-outline-variant rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-body-md">
+<option value="">Selecione uma moto</option>
+<option value="ABC-1234">ABC-1234 (Honda Titan)</option>
+<option value="XYZ-9876">XYZ-9876 (Yamaha Fazer)</option>
+<option value="MOT-5555">MOT-5555 (Honda Biz)</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-label-bold font-label-bold text-on-surface-variant mb-2">Valor (R$)</label>
+<input class="w-full bg-white border border-outline-variant rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-body-md" placeholder="0,00" type="number"/>
+</div>
+<div>
+<label class="block text-label-bold font-label-bold text-on-surface-variant mb-2">Data</label>
+<input class="w-full bg-white border border-outline-variant rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-body-md" type="date"/>
+</div>
+</div>
+<div>
+<label class="block text-label-bold font-label-bold text-on-surface-variant mb-2">Descrição</label>
+<textarea class="w-full bg-white border border-outline-variant rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-body-md" placeholder="Descreva os serviços realizados..." rows="4"></textarea>
+</div>
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-semibold hover:opacity-95 active:scale-95 transition-all" type="submit">
+                                Salvar Registro
+                            </button>
+</form>
+</div>
+</section>
+<!-- Data Table & Filters Section -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+<!-- Filters Card -->
+<div class="bg-white rounded-xl shadow-[0px_4px_10px_rgba(0,0,0,0.05)] p-6">
+<div class="flex items-center gap-2 mb-4 text-primary font-semibold">
+<span class="material-symbols-outlined">filter_list</span>
+                            Filtros Avançados
+                        </div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+<div>
+<label class="block text-caption font-label-bold text-on-surface-variant mb-1 uppercase tracking-wider">Data Início</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-body-md focus:border-primary outline-none" type="date"/>
+</div>
+<div>
+<label class="block text-caption font-label-bold text-on-surface-variant mb-1 uppercase tracking-wider">Data Fim</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-body-md focus:border-primary outline-none" type="date"/>
+</div>
+<div class="relative">
+<label class="block text-caption font-label-bold text-on-surface-variant mb-1 uppercase tracking-wider">Placa da Moto</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-body-md focus:border-primary outline-none" placeholder="Buscar placa..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-8 text-outline text-lg">search</span>
+</div>
+</div>
+</div>
+<!-- Table Card -->
+<div class="bg-white rounded-xl shadow-[0px_4px_10px_rgba(0,0,0,0.05)] overflow-hidden">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-slate-50 border-b border-slate-200">
+<th class="px-6 py-4 text-left text-label-bold font-label-bold text-primary uppercase tracking-wider">ID</th>
+<th class="px-6 py-4 text-left text-label-bold font-label-bold text-primary uppercase tracking-wider">Moto (Placa)</th>
+<th class="px-6 py-4 text-left text-label-bold font-label-bold text-primary uppercase tracking-wider">Valor</th>
+<th class="px-6 py-4 text-left text-label-bold font-label-bold text-primary uppercase tracking-wider">Descrição</th>
+<th class="px-6 py-4 text-left text-label-bold font-label-bold text-primary uppercase tracking-wider">Data</th>
+<th class="px-6 py-4 text-right text-label-bold font-label-bold text-primary uppercase tracking-wider">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-body-md font-medium text-primary">#10245</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-body-md font-bold text-primary">ABC-1234</span>
+<span class="text-caption text-secondary">Honda Titan 160</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md font-semibold text-primary">R$ 450,00</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant max-w-[200px] truncate">Troca de óleo e pastilhas de freio dianteiras.</td>
+<td class="px-6 py-4 text-body-md text-secondary">12/05/2024</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-body-md font-medium text-primary">#10244</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-body-md font-bold text-primary">XYZ-9876</span>
+<span class="text-caption text-secondary">Yamaha Fazer 250</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md font-semibold text-primary">R$ 1.200,00</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant max-w-[200px] truncate">Revisão completa de 20.000km, pneus novos.</td>
+<td class="px-6 py-4 text-body-md text-secondary">10/05/2024</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-body-md font-medium text-primary">#10243</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-body-md font-bold text-primary">MOT-5555</span>
+<span class="text-caption text-secondary">Honda Biz 125</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md font-semibold text-primary">R$ 85,00</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant max-w-[200px] truncate">Conserto de pneu furado e alinhamento.</td>
+<td class="px-6 py-4 text-body-md text-secondary">08/05/2024</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 text-body-md font-medium text-primary">#10242</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-body-md font-bold text-primary">ABC-1234</span>
+<span class="text-caption text-secondary">Honda Titan 160</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md font-semibold text-primary">R$ 320,00</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant max-w-[200px] truncate">Troca da relação (corrente, coroa, pinhão).</td>
+<td class="px-6 py-4 text-body-md text-secondary">05/05/2024</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+<span class="text-caption text-on-surface-variant">Mostrando 4 de 128 registros</span>
+<div class="flex gap-2">
+<button class="px-3 py-1 border border-outline-variant rounded text-body-md hover:bg-white transition-colors">Anterior</button>
+<button class="px-3 py-1 bg-primary text-on-primary rounded text-body-md">1</button>
+<button class="px-3 py-1 border border-outline-variant rounded text-body-md hover:bg-white transition-colors">2</button>
+<button class="px-3 py-1 border border-outline-variant rounded text-body-md hover:bg-white transition-colors">3</button>
+<button class="px-3 py-1 border border-outline-variant rounded text-body-md hover:bg-white transition-colors">Próximo</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

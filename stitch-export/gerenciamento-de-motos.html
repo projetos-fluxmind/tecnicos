@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gerenciamento de Motos - Flash Expense Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dbd9db",
+                        "primary-fixed": "#d3e4ff",
+                        "on-secondary-fixed": "#051d30",
+                        "outline-variant": "#c4c6cd",
+                        "surface-bright": "#fbf9fb",
+                        "primary": "#04172c",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#4e6078",
+                        "tertiary-fixed": "#dfe3e4",
+                        "on-tertiary-container": "#8f9394",
+                        "surface-container-low": "#f5f3f5",
+                        "tertiary-fixed-dim": "#c3c7c8",
+                        "outline": "#74777d",
+                        "surface-variant": "#e4e2e4",
+                        "surface-container": "#efedef",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#36485f",
+                        "surface-container-highest": "#e4e2e4",
+                        "secondary-fixed-dim": "#b3c9e2",
+                        "tertiary": "#131819",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e9e7ea",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#181c1d",
+                        "primary-container": "#1a2c42",
+                        "secondary-fixed": "#cfe5ff",
+                        "inverse-surface": "#303032",
+                        "background": "#fbf9fb",
+                        "secondary": "#4b6076",
+                        "on-secondary-container": "#50657b",
+                        "on-surface-variant": "#44474d",
+                        "on-background": "#1b1c1d",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f2f0f2",
+                        "on-primary-fixed": "#091c32",
+                        "on-surface": "#1b1c1d",
+                        "primary-fixed-dim": "#b6c8e4",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#434849",
+                        "surface": "#fbf9fb",
+                        "secondary-container": "#cce2fc",
+                        "inverse-primary": "#b6c8e4",
+                        "on-primary-container": "#8294ae",
+                        "tertiary-container": "#272c2d",
+                        "on-secondary-fixed-variant": "#34495e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar_width": "260px",
+                        "gutter": "24px",
+                        "sidebar_collapsed": "72px",
+                        "header_height": "64px",
+                        "container_max_width": "1440px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Inter"],
+                        "caption": ["Inter"],
+                        "label-bold": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h3": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "300"}],
+                        "label-bold": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "h1": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h3": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #fbf9fb; color: #1b1c1d; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+    </style>
+</head>
+<body class="antialiased">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-16 z-50 border-b bg-white border-slate-200 shadow-[0px_4px_10px_rgba(0,0,0,0.05)] flex justify-between items-center px-6">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-[#1A2C42] tracking-tight">Flash Expense Manager</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-500 hover:text-[#1A2C42] transition-colors font-body-md text-body-md" href="#">Dashboard</a>
+<a class="text-slate-500 hover:text-[#1A2C42] transition-colors font-body-md text-body-md" href="#">Relatórios</a>
+<a class="text-slate-500 hover:text-[#1A2C42] transition-colors font-body-md text-body-md" href="#">Configurações</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="Avatar do Gestor" class="h-full w-full object-cover" data-alt="A professional headshot of a corporate fleet manager in a clean, modern office setting. The lighting is bright and professional, utilizing soft-key studio techniques to create a high-end light-mode aesthetic. The individual wears a navy polo shirt, aligning with the brand's primary color palette. The background is softly blurred, showing hints of a collaborative workspace with sleek furniture and digital displays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxmzWahpC0z768Mp-uFNb6QZQ5-8sXHx1bFDOZRYWrLBUpG--IBltF9lSBL1shpixuDrwV47Vh_zzhPcs1daER4A1JUW1Gf1SauwcRkhn1xQB1DjvDa5hb4pr5kKTmzYLvtT37MlKkIZnYF71rRcvz31JylwKZiOv7sVC253STJGDV9GM1oo5v5ZD0GwhOgicAZJr1MHKwivOWvMnmH8KBXvZtgkf64Wumx65DbYnfDV_8IZ4mI-ia448EwkjnmQB5BnEo-N3cD-Y"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-[260px] border-r bg-white border-slate-200 flex flex-col py-4 gap-2">
+<div class="px-6 py-4 mb-2">
+<h3 class="text-[#1A2C42] font-black tracking-tight text-body-lg">Operacional</h3>
+<p class="text-slate-500 text-caption font-caption">Gestão de Frota</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="text-sm font-medium">Gastos</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="credit_score">credit_score</span>
+<span class="text-sm font-medium">Recarga Flash</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="engineering">engineering</span>
+<span class="text-sm font-medium">Técnicos</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 bg-slate-100 text-[#1A2C42] border-l-4 border-[#1A2C42]" href="#">
+<span class="material-symbols-outlined" data-icon="two_wheeler">two_wheeler</span>
+<span class="text-sm font-semibold">Motos</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 hover:bg-slate-50 hover:pl-7 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="text-sm font-medium">Histórico</span>
+</a>
+</nav>
+<div class="mt-auto px-6 pt-4 border-t border-slate-100">
+<a class="flex items-center gap-3 py-3 text-error hover:text-red-700 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-sm font-medium">Sair</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-16 min-h-screen p-gutter bg-background">
+<div class="max-w-[1440px] mx-auto space-y-gutter">
+<!-- Page Header -->
+<div class="flex justify-between items-end">
+<div>
+<h1 class="font-h1 text-h1 text-primary">Gerenciamento de Motos</h1>
+<p class="text-slate-500 font-body-md text-body-md mt-1">Controle e cadastro da frota operacional de motocicletas.</p>
+</div>
+<div class="flex gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all w-64 text-body-md font-body-md" placeholder="Buscar por placa..." type="text"/>
+</div>
+<button class="bg-primary text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-primary-container transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                        Novo Gasto
+                    </button>
+</div>
+</div>
+<!-- Bento Layout Content -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Quick Registration Card -->
+<div class="col-span-12 lg:col-span-4 bg-white p-6 rounded-xl shadow-[0px_4px_10px_rgba(0,0,0,0.05)] h-fit">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-h3 text-h3 text-primary">Cadastrar Moto</h2>
+<span class="material-symbols-outlined text-on-primary-container" data-icon="app_registration">app_registration</span>
+</div>
+<form class="space-y-4">
+<div>
+<label class="block text-label-bold font-label-bold text-slate-700 mb-1">PLACA</label>
+<input class="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md" placeholder="ABC-1234" type="text"/>
+</div>
+<div>
+<label class="block text-label-bold font-label-bold text-slate-700 mb-1">KM ATUAL</label>
+<input class="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md" placeholder="000.000" type="number"/>
+</div>
+<div class="pt-2">
+<button class="w-full bg-primary text-on-primary py-3 rounded-xl font-semibold hover:bg-primary-container transition-colors shadow-sm" type="submit">
+                                Salvar Veículo
+                            </button>
+</div>
+</form>
+<div class="mt-8 p-4 bg-surface-container rounded-xl border border-outline-variant/30">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="info">info</span>
+<div>
+<p class="text-label-bold font-label-bold text-secondary mb-1">Dica de Gestão</p>
+<p class="text-caption font-caption text-on-surface-variant">Mantenha a quilometragem atualizada para previsões precisas de manutenção preventiva.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Data Table Card -->
+<div class="col-span-12 lg:col-span-8 bg-white rounded-xl shadow-[0px_4px_10px_rgba(0,0,0,0.05)] overflow-hidden">
+<div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
+<h2 class="font-h3 text-h3 text-primary">Frota Ativa</h2>
+<div class="flex gap-2">
+<button class="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-slate-600" data-icon="filter_list">filter_list</span>
+</button>
+<button class="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-slate-600" data-icon="download">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/50">
+<th class="px-6 py-4 font-label-bold text-label-bold text-primary uppercase tracking-wider border-b border-slate-100">ID</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-primary uppercase tracking-wider border-b border-slate-100">Placa</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-primary uppercase tracking-wider border-b border-slate-100">KM Atual</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-primary uppercase tracking-wider border-b border-slate-100">Data Última Atualização</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-primary uppercase tracking-wider border-b border-slate-100 text-center">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4 text-body-md font-medium text-slate-500">#042</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md bg-slate-100 text-primary font-bold text-sm border border-slate-200">BRA2E19</span>
+</td>
+<td class="px-6 py-4 text-body-md font-body-md text-slate-700">12.450 km</td>
+<td class="px-6 py-4 text-body-md font-body-md text-slate-500">22/05/2024</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-2">
+<button class="p-1.5 text-primary hover:bg-primary-fixed rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 text-error hover:bg-error-container rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4 text-body-md font-medium text-slate-500">#039</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md bg-slate-100 text-primary font-bold text-sm border border-slate-200">FLS4X40</span>
+</td>
+<td class="px-6 py-4 text-body-md font-body-md text-slate-700">45.890 km</td>
+<td class="px-6 py-4 text-body-md font-body-md text-slate-500">19/05/2024</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-2">
+<button class="p-1.5 text-primary hover:bg-primary-fixed rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 text-error hover:bg-error-container rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4 text-body-md font-medium text-slate-500">#035</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md bg-slate-100 text-primary font-bold text-sm border border-slate-200">EXP9Y22</span>
+</td>
+<td class="px-6 py-4 text-body-md font-body-md text-slate-700">8.210 km</td>
+<td class="px-6 py-4 text-body-md font-body-md text-slate-500">15/05/2024</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-2">
+<button class="p-1.5 text-primary hover:bg-primary-fixed rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 text-error hover:bg-error-container rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors">
+<td class="px-6 py-4 text-body-md font-medium text-slate-500">#031</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md bg-slate-100 text-primary font-bold text-sm border border-slate-200">RUN1K00</span>
+</td>
+<td class="px-6 py-4 text-body-md font-body-md text-slate-700">102.340 km</td>
+<td class="px-6 py-4 text-body-md font-body-md text-slate-500">10/05/2024</td>
+<td class="px-6 py-4">
+<div class="flex justify-center gap-2">
+<button class="p-1.5 text-primary hover:bg-primary-fixed rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 text-error hover:bg-error-container rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-6 border-t border-slate-100 flex items-center justify-between">
+<span class="text-caption font-caption text-slate-500">Mostrando 1 a 4 de 28 motos</span>
+<div class="flex gap-1">
+<button class="px-3 py-1.5 border border-slate-200 rounded-lg text-slate-400 hover:bg-slate-50 cursor-not-allowed">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-4 py-1.5 bg-primary text-white rounded-lg text-sm font-medium">1</button>
+<button class="px-4 py-1.5 hover:bg-slate-100 rounded-lg text-sm font-medium text-slate-600 transition-colors">2</button>
+<button class="px-4 py-1.5 hover:bg-slate-100 rounded-lg text-sm font-medium text-slate-600 transition-colors">3</button>
+<button class="px-3 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Performance Insight Widget -->
+<div class="col-span-12 bg-white p-gutter rounded-xl shadow-[0px_4px_10px_rgba(0,0,0,0.05)] grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="flex items-center gap-4">
+<div class="h-12 w-12 rounded-xl bg-blue-50 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[28px]" data-icon="speed">speed</span>
+</div>
+<div>
+<p class="text-caption font-caption text-slate-500">Média KM/Frota</p>
+<p class="text-h2 font-h2 text-primary">34.215</p>
+</div>
+</div>
+<div class="flex items-center gap-4 border-l border-slate-100 pl-8">
+<div class="h-12 w-12 rounded-xl bg-green-50 flex items-center justify-center text-green-700">
+<span class="material-symbols-outlined text-[28px]" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="text-caption font-caption text-slate-500">Motos Operacionais</p>
+<p class="text-h2 font-h2 text-primary">26/28</p>
+</div>
+</div>
+<div class="flex items-center gap-4 border-l border-slate-100 pl-8">
+<div class="h-12 w-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600">
+<span class="material-symbols-outlined text-[28px]" data-icon="build_circle">build_circle</span>
+</div>
+<div>
+<p class="text-caption font-caption text-slate-500">Em Manutenção</p>
+<p class="text-h2 font-h2 text-primary">02</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

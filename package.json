@@ -1,0 +1,21 @@
+{
+  "name": "controle-gastos-operacionais",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Sistema web para controle de gastos operacionais de frota técnica.",
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace apps/frontend",
+    "dev:frontend": "npm run dev --workspace apps/frontend",
+    "dev:backend": "npm run dev --workspace apps/backend",
+    "build": "npm run build --workspace apps/frontend && npm run build --workspace apps/backend",
+    "lint": "npm run lint --workspace apps/frontend && npm run lint --workspace apps/backend",
+    "stitch:download": "node scripts/download-stitch-screens.mjs"
+  },
+  "devDependencies": {
+    "@google/stitch-sdk": "^0.1.1"
+  }
+}
