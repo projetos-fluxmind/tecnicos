@@ -24,14 +24,11 @@ export default function TecnicosPage() {
   }
 
   async function handleDelete(id: string | number) {
-    if (!confirm("Tem certeza que deseja excluir este técnico? Esta ação é irreversível.")) return;
+    if (!confirm("Tem certeza que deseja excluir este técnico? Ele será removido da listagem ativa.")) return;
     
     setLoading(true);
-    
-    // Primeiro removemos os vínculos na tabela de junção para evitar erro de FK
-    await supabase.from("vinculos_tecnico_moto").delete().eq("tecnico_id", id);
-    
-    const { error } = await supabase.from("tecnicos").delete().eq("id", id);
+    // Realizamos a inativação para não quebrar o histórico de despesas
+    const { error } = await supabase.from("tecnicos").update({ status: 'inativo' }).eq("id", id);
     
     if (error) {
       alert("Erro ao excluir: " + error.message);
@@ -122,7 +119,7 @@ export default function TecnicosPage() {
         ]}
         title="Gerenciamento de Técnicos"
         formTitle="Cadastrar Novo Técnico"
-        data={tecnicos}
+        data={tecnicos.filter(t => t.status === 'ativo')}
         isLoading={loading}
         onSave={handleSave}
         renderRow={(tecnico) => (

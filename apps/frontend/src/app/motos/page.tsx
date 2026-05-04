@@ -24,14 +24,11 @@ export default function MotosPage() {
   }
 
   async function handleDelete(id: string | number) {
-    if (!confirm("Tem certeza que deseja excluir esta moto? Esta ação é irreversível.")) return;
+    if (!confirm("Tem certeza que deseja excluir esta moto? Ela será removida da listagem ativa.")) return;
     
     setLoading(true);
-    
-    // Primeiro removemos os vínculos na tabela de junção para evitar erro de FK
-    await supabase.from("vinculos_tecnico_moto").delete().eq("moto_id", id);
-    
-    const { error } = await supabase.from("motos").delete().eq("id", id);
+    // Realizamos a inativação para não quebrar o histórico de abastecimentos/manutenções
+    const { error } = await supabase.from("motos").update({ status: 'inativa' }).eq("id", id);
     
     if (error) {
       alert("Erro ao excluir: " + error.message);
@@ -133,7 +130,7 @@ export default function MotosPage() {
         ]}
         title="Gerenciamento de Motos"
         formTitle="Cadastrar Nova Moto"
-        data={motos}
+        data={motos.filter(m => m.status === 'ativa')}
         isLoading={loading}
         onSave={handleSave}
         renderRow={(moto) => (
