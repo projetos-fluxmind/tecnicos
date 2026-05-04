@@ -1,4 +1,5 @@
 {
+  "name": "frota-tecnica",
   "framework": "nextjs",
   "rootDirectory": "apps/frontend"
 }
