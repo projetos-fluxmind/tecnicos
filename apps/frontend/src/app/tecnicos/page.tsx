@@ -24,12 +24,12 @@ export default function TecnicosPage() {
   }
 
   async function handleDelete(id: string | number) {
-    if (!confirm("Tem certeza que deseja excluir este técnico?")) return;
+    if (!confirm("Tem certeza que deseja inativar este técnico?")) return;
     
     setLoading(true);
-    const { error } = await supabase.from("tecnicos").delete().eq("id", id);
+    const { error } = await supabase.from("tecnicos").update({ status: 'inativo' }).eq("id", id);
     if (error) {
-      alert("Erro ao excluir: " + error.message);
+      alert("Erro ao inativar: " + error.message);
     } else {
       fetchTecnicos();
     }
@@ -93,6 +93,7 @@ export default function TecnicosPage() {
   return (
     <AppShell activePath="/tecnicos">
       <ModulePage
+        editingItem={editingItem}
         actionLabel="Novo técnico"
         description="Cadastro e gerenciamento da lista de técnicos operacionais da frota."
         fields={[

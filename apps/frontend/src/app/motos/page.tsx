@@ -24,12 +24,12 @@ export default function MotosPage() {
   }
 
   async function handleDelete(id: string | number) {
-    if (!confirm("Tem certeza que deseja excluir esta moto?")) return;
+    if (!confirm("Tem certeza que deseja inativar esta moto?")) return;
     
     setLoading(true);
-    const { error } = await supabase.from("motos").delete().eq("id", id);
+    const { error } = await supabase.from("motos").update({ status: 'inativa' }).eq("id", id);
     if (error) {
-      alert("Erro ao excluir: " + error.message);
+      alert("Erro ao inativar: " + error.message);
     } else {
       fetchMotos();
     }
@@ -101,6 +101,7 @@ export default function MotosPage() {
   return (
     <AppShell activePath="/motos">
       <ModulePage
+        editingItem={editingItem}
         actionLabel="Nova moto"
         description="Cadastro da frota, acompanhamento do KM atual e status das motos disponíveis para lançamentos."
         fields={[
