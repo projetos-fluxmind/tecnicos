@@ -37,7 +37,7 @@ export default function ManutencaoPage() {
 
     if (gastosData) {
       // Filtra apenas o que é manutenção
-      const filtered = gastosData.filter(g => {
+      const filtered = gastosData.filter((g: any) => {
         try {
           const obs = JSON.parse(g.observacoes || "{}");
           return obs.tipo_real === "manutencao";
@@ -84,7 +84,7 @@ export default function ManutencaoPage() {
     fetchData();
   }, []);
 
-  const totalValue = gastos.reduce((acc, g) => acc + g.valor, 0);
+  const totalValue = gastos.reduce((acc: number, g: any) => acc + g.valor, 0);
   const avgValue = gastos.length > 0 ? totalValue / gastos.length : 0;
 
   return (

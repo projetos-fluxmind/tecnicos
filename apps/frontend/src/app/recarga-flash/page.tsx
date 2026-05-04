@@ -30,7 +30,7 @@ export default function RecargaFlashPage() {
 
     if (recargasData) {
       // Filtra apenas o que é recarga flash
-      const filtered = recargasData.filter(r => {
+      const filtered = recargasData.filter((r: any) => {
         try {
           const obs = JSON.parse(r.observacoes || "{}");
           return obs.tipo_real === "recarga_flash";
@@ -69,7 +69,7 @@ export default function RecargaFlashPage() {
     fetchData();
   }, []);
 
-  const totalValue = recargas.reduce((acc, r) => acc + r.valor, 0);
+  const totalValue = recargas.reduce((acc: number, r: any) => acc + r.valor, 0);
 
   return (
     <AppShell activePath="/recarga-flash">

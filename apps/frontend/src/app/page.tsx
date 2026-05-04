@@ -41,11 +41,11 @@ export default function HomePage() {
     // Busca todas as despesas da tabela unificada
     const { data: despesas } = await supabase.from("despesas").select("valor, categoria");
 
-    const total = despesas?.reduce((acc, v) => acc + v.valor, 0) || 0;
+    const total = despesas?.reduce((acc: number, v: any) => acc + v.valor, 0) || 0;
     
-    const alimentacao = despesas?.filter(d => d.categoria === "alimentacao") || [];
+    const alimentacao = despesas?.filter((d: any) => d.categoria === "alimentacao") || [];
     const avgAlimentacao = alimentacao.length > 0 
-      ? alimentacao.reduce((acc, v) => acc + v.valor, 0) / alimentacao.length 
+      ? alimentacao.reduce((acc: number, v: any) => acc + v.valor, 0) / alimentacao.length 
       : 0;
 
     setMetrics([

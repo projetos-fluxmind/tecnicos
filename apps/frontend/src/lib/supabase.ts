@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-let browserClient: ReturnType<typeof createClient> | null = null;
+let browserClient: any = null;
 
 export function getSupabaseBrowserClient() {
   if (browserClient) {
@@ -14,6 +14,6 @@ export function getSupabaseBrowserClient() {
     throw new Error("Configure NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.");
   }
 
-  browserClient = createClient(supabaseUrl, supabasePublishableKey);
+  browserClient = createClient<any>(supabaseUrl, supabasePublishableKey);
   return browserClient;
 }
